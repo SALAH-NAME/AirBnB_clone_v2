@@ -19,7 +19,7 @@ class FileStorage:
     # A dictionary containing all the objects
     __objects = {}
 
-    def all(self):
+    def all(self, cls=None):
         """
         Return the dictionary __objects.
         Args:
@@ -27,8 +27,11 @@ class FileStorage:
         Returns:
             dict: the dictionary __objects
         """
-        # Just return __objects
-        return FileStorage.__objects
+        if cls is None:
+            return FileStorage.__objects
+        else:
+            return {k: v for k, v in FileStorage.__objects.items()
+                    if type(v).__name__ == cls}
 
     def new(self, obj):
         """
@@ -77,3 +80,14 @@ class FileStorage:
         except FileNotFoundError:
             # see the other comment
             return
+
+    def delete(self, obj=None):
+        """
+        Delete obj from __objects if it’s inside.
+        Args:
+            obj (BaseModel): the object to delete
+        """
+        if obj is not None:
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
+            if key in FileStorage.__objects:
+                del FileStorage.__objects[key]
