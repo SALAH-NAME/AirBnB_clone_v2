@@ -30,8 +30,10 @@ class FileStorage:
         if cls is None:
             return FileStorage.__objects
         else:
+            if type(cls) == str:
+                cls = eval(cls)
             return {k: v for k, v in FileStorage.__objects.items()
-                    if type(v).__name__ == cls}
+                    if isinstance(v, cls)}
 
     def new(self, obj):
         """
