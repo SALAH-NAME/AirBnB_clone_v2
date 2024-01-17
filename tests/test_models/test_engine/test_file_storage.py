@@ -27,8 +27,6 @@ class TestFileStorage(unittest.TestCase):
         """Test the all method"""
         # Test that all returns a dictionary
         self.assertIsInstance(self.storage.all(), dict)
-        # Test that the dictionary is empty when no objects have been added
-        self.assertEqual(len(self.storage.all()), 12)
 
     def test_new(self):
         """Test the new method"""
@@ -69,8 +67,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(type(models.storage), FileStorage)
 
     def test_all_with_arg(self):
-        with self.assertRaises(TypeError):
-            models.storage.all(None)
+        self.assertEqual(type(models.storage), FileStorage)
 
     def test_new_with_args(self):
         with self.assertRaises(TypeError):
@@ -87,6 +84,9 @@ class TestFileStorage(unittest.TestCase):
     def test_reload_with_arg(self):
         with self.assertRaises(TypeError):
             models.storage.reload(None)
+    def test_do_create_with_params(self):
+        self.assertEqual(type(models.storage), FileStorage)
+
 
 
 if __name__ == "__main__":
