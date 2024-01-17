@@ -67,27 +67,45 @@ class HBNBCommand(cmd.Cmd):
             self (HBNBCommand): the current instance
             arg (str): the class name
         """
-        if not arg:
+        args = shlex.split(arg)
+        if not args:
             print("** class name missing **")
-        elif arg not in self.actions:
+        elif args[0] not in self.actions:
             print("** class doesn't exist **")
         else:
-            if arg == "BaseModel":
+            if args[0] == "BaseModel":
                 # Create a new instance of BaseModel
                 obj = BaseModel()
-            elif arg == "User":
+            elif args[0] == "User":
                 # Create a new instance of User
                 obj = User()
-            elif arg == "State":
+            elif args[0] == "State":
                 obj = State()
-            elif arg == "City":
+            elif args[0] == "City":
                 obj = City()
-            elif arg == "Amenity":
+            elif args[0] == "Amenity":
                 obj = Amenity()
-            elif arg == "Place":
+            elif args[0] == "Place":
                 obj = Place()
-            elif arg == "Review":
+            elif args[0] == "Review":
                 obj = Review()
+            # Process additional parameters
+            for param in args[1:]:
+                try:
+                    key, value = param.split('=')
+                    # Replace underscores with spaces
+                    value = value.replace("_", " ")
+                    # Check if value is a string
+                    if value[0] == '"' and value[-1] == '"':
+                        value = value[1:-1]
+                    # Check if value is an integer or float
+                    elif '.' in value:
+                        value = float(value)
+                    else:
+                        value = int(value)
+                    setattr(obj, key, value)
+                except ValueError:
+                    continue
             # Save the instance to the JSON file
             obj.save()
             # Print the id of the instance
